@@ -9,9 +9,8 @@
 
 #define SPRITE_ATTR_ENTRY_SIZE 8
 
-void load_sprite_at_index(const char* filename, uint8_t index, int16_t xPos, int16_t yPos, uint8_t zDepth) {
-    unsigned long vram_addr = (SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * index));
-    unsigned long attr_addr = (SPRITE_ATTR_BASE + (SPRITE_ATTR_ENTRY_SIZE * index));
+unsigned long load_sprite_to_vram_at_index(const char* filename, uint8_t vram_index) {
+    unsigned long vram_addr = (SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * vram_index));
 
     void *vram_ptr = (void *)(vram_addr & 0xffff);
     unsigned char upper = (unsigned char)(vram_addr >> 16);
@@ -27,6 +26,12 @@ void load_sprite_at_index(const char* filename, uint8_t index, int16_t xPos, int
     else {
         cbm_k_load(2, vram_ptr);
     }
+
+    return vram_addr;
+}
+
+void set_sprite_attributes_at_index(uint8_t attr_index, unsigned long vram_addr, int16_t xPos, int16_t yPos, uint8_t zDepth) {
+    unsigned long attr_addr = (SPRITE_ATTR_BASE + (SPRITE_ATTR_ENTRY_SIZE * attr_index));
 
     VERA.control = 0; // Use VERA port 0
     // Set the attribute address to start loading
@@ -54,7 +59,15 @@ void load_sprites() {
 
     vera_sprites_enable(1);
 
-    // load the sprites
-    load_sprite_at_index("assets/plane.img", 0, g_shipXPos, g_shipYPos, 3);
+    // load the sprites into vram,
+    // Then set their attributes
+    unsigned long plane_vram_addr = load_sprite_to_vram_at_index("assets/plane.img", 0);
+    set_sprite_attributes_at_index(0, plane_vram_addr, g_shipXPos, g_shipYPos, 3);
+
+    // Load the shots.  There can be multiple shots, all pointing to the same image in vram
+    unsigned long shot_vram_addr = load_sprite_to_vram_at_index("assets/shot.img", 1);
+    for (uint8_t i = 1; i <= MAX_SHOTS; i++) {
+        set_sprite_attributes_at_index(i, shot_vram_addr, 0, 0, 0);
+    }
 }
 

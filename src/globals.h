@@ -1,6 +1,8 @@
 #pragma once
 #define SPRITE_ATTR_BASE 0x1fc08
 
+#define MAX_SHOTS 6
+
 extern long g_joystick_state;
 
 extern int16_t g_shipXPos;
