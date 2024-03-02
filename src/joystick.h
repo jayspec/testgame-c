@@ -1,0 +1,1 @@
+extern void get_joystick_state();

@@ -8,33 +8,32 @@
 #define MAX_Y 480
 #define SHIP_SPEED 5
 
-long joystick_state = 0;
 const unsigned long sprite1_pos_addr = SPRITE_ATTR_BASE + 2;
 
 void move_player_ship() {
-    joystick_state = cx16_k_joystick_get(0);  
+
     // right
-    if (!(joystick_state & JOY_RIGHT_MASK)) {
+    if (!(g_joystick_state & JOY_RIGHT_MASK)) {
         g_shipXPos += SHIP_SPEED;
         if (g_shipXPos > MAX_X) {
             g_shipXPos = MIN_X;
         }
     }
     // left
-    else if (!(joystick_state & JOY_LEFT_MASK)) {
+    else if (!(g_joystick_state & JOY_LEFT_MASK)) {
         g_shipXPos -= SHIP_SPEED;
         if (g_shipXPos < MIN_X) {
             g_shipXPos = MAX_X;
         }
     }   
     // down
-    if (!(joystick_state & JOY_DOWN_MASK)) {
+    if (!(g_joystick_state & JOY_DOWN_MASK)) {
         g_shipYPos += SHIP_SPEED;
         if (g_shipYPos > MAX_Y) {
             g_shipYPos = MIN_Y;
         }
     // up
-    } else if (!(joystick_state & JOY_UP_MASK)) {
+    } else if (!(g_joystick_state & JOY_UP_MASK)) {
         g_shipYPos -= SHIP_SPEED;
         if (g_shipYPos < MIN_Y) {
             g_shipYPos = MAX_Y;

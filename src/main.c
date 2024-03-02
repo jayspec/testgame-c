@@ -4,6 +4,7 @@
 #include "globals.h"
 #include "sprite_load.h"
 #include "ship_control.h"
+#include "joystick.h"
 
 int main() {
     global_init();
@@ -11,6 +12,7 @@ int main() {
     load_sprites();
 
     while(1) {
+        get_joystick_state();
         waitvsync();
         move_player_ship();
     }

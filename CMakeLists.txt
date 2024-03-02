@@ -7,4 +7,5 @@ add_executable(
     src/main.c 
     src/globals.c
     src/ship_control.c
-    src/sprite_load.c)
+    src/sprite_load.c
+    src/joystick.c)
