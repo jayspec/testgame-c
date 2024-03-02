@@ -5,4 +5,5 @@ project(testgame)
 add_executable(
     testgame 
     src/main.c 
-    src/globals.c)
+    src/globals.c
+    src/ship_control.c)
