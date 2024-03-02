@@ -6,6 +6,7 @@
 #include "ship_control.h"
 
 int main() {
+    global_init();
 
     load_sprites();
 

@@ -4,18 +4,20 @@
 
 #include "globals.h"
 
-void load_sprites() {
-    unsigned long sprite_vram_addr = 0x04000;
+#define SPRITE_VRAM_BASE_ADDR 0x04000
+#define SPRITE_SIZE 512 // 32x32 pixels, 4bpp
 
-    void *vram_ptr = (void *)(sprite_vram_addr & 0xffff);
-    unsigned char upper = (unsigned char)(sprite_vram_addr >> 16);
+#define SPRITE_ATTR_ENTRY_SIZE 8
 
-    global_init();
+void load_sprite_at_index(const char* filename, uint8_t index, int16_t xPos, int16_t yPos, uint8_t zDepth) {
+    unsigned long vram_addr = (SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * index));
+    unsigned long attr_addr = (SPRITE_ATTR_BASE + (SPRITE_ATTR_ENTRY_SIZE * index));
 
-    vera_sprites_enable(1);
+    void *vram_ptr = (void *)(vram_addr & 0xffff);
+    unsigned char upper = (unsigned char)(vram_addr >> 16);
 
-    // load the sprites
-    cbm_k_setnam("assets/plane.img");
+    // load the sprite
+    cbm_k_setnam(filename);
     // headerless load
     cbm_k_setlfs(0, 8, 2);
 
@@ -28,24 +30,31 @@ void load_sprites() {
 
     VERA.control = 0; // Use VERA port 0
     // Set the attribute address to start loading
-    VERA.address = SPRITE_ATTR_BASE & 0xffff;
-    VERA.address_hi = ((SPRITE_ATTR_BASE >> 16) | VERA_INC_1); // Hi byte of sprite 1 attribute address, stride 1
+    VERA.address = attr_addr & 0xffff;
+    VERA.address_hi = ((attr_addr >> 16) | VERA_INC_1); // Hi byte of sprite 1 attribute address, stride 1
 
     // Set the address in VRAM where the sprite is located
-    uint8_t sprite_vram_lo = (sprite_vram_addr >> 5);
-    uint8_t sprite_vram_hi = (sprite_vram_addr >> 13); // Bit 8 = Mode 0 (4bpp, 16 color)
-
-    VERA.data0 = sprite_vram_lo;
-    VERA.data0 = sprite_vram_hi;
+    VERA.data0 = (vram_addr >> 5);
+    VERA.data0 = (vram_addr >> 13); // Bit 8 = Mode 0 (4bpp, 16 color)
 
     // Set initial position
-    VERA.data0 = g_shipXPos;
-    VERA.data0 = g_shipXPos >> 8;
-    VERA.data0 = g_shipYPos;
-    VERA.data0 = g_shipYPos >> 8;
+    VERA.data0 = xPos;
+    VERA.data0 = xPos >> 8;
+    VERA.data0 = yPos;
+    VERA.data0 = yPos >> 8;
 
-    // No flip, no collision mask, Z-depth 3 (in front of layer 1)
-    VERA.data0 = 0x0c;
+    // No flip, no collision mask, specified Z-depth
+    VERA.data0 = 0b0000000 | (zDepth << 2);
     // Palette offset 0, 32x32 pixels
     VERA.data0 = 0xa0;
+
 }
+
+void load_sprites() {
+
+    vera_sprites_enable(1);
+
+    // load the sprites
+    load_sprite_at_index("assets/plane.img", 0, g_shipXPos, g_shipYPos, 3);
+}
+
