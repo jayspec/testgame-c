@@ -5,6 +5,7 @@
 #include "sprite_load.h"
 #include "ship_control.h"
 #include "joystick.h"
+#include "shot.h"
 
 int main() {
     global_init();
@@ -15,6 +16,7 @@ int main() {
         get_joystick_state();
         waitvsync();
         move_player_ship();
+        handle_shots();
     }
 
 }
