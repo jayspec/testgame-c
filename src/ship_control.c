@@ -9,7 +9,7 @@
 #define SHIP_SPEED 5
 
 long joystick_state = 0;
-unsigned long sprite1_pos_addr = SPRITE_ATTR_BASE + 2;
+const unsigned long sprite1_pos_addr = SPRITE_ATTR_BASE + 2;
 
 void move_player_ship() {
     joystick_state = cx16_k_joystick_get(0);  

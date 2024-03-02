@@ -1,3 +1,4 @@
+#pragma once
 #define SPRITE_ATTR_BASE 0x1fc08
 
 extern int16_t g_shipXPos;
