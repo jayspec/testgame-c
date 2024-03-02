@@ -9,52 +9,47 @@
 uint8_t nextShotCountdown = SHOT_FRAME_DELAY;
 
 void advance_shot_at_index(uint8_t attr_index) {
-    shot_t shot = g_liveShots[attr_index];
+    shot_t *shot = &g_liveShots[attr_index];
 
-    if (shot.isActive) {
+    if (shot->isActive) {
         //printf("moving active shot %d", attr_index);
-        VERA.address = (shot.attr_address + 2) & 0xffff;
-        VERA.address_hi = (((shot.attr_address + 2) >> 16) | VERA_INC_1);
+        VERA.address = (shot->attr_address + 2) & 0xffff;
+        VERA.address_hi = (((shot->attr_address + 2) >> 16) | VERA_INC_1);
 
-        shot.xPos += SHOT_SPEED;
+        shot->xPos += SHOT_SPEED;
 
-        VERA.data0 = shot.xPos;
-        VERA.data0 = (shot.xPos >> 8);
-        VERA.data0 = shot.yPos;
-        VERA.data0 = (shot.yPos >> 8);
+        VERA.data0 = shot->xPos;
+        VERA.data0 = (shot->xPos >> 8);
+        VERA.data0 = shot->yPos;
+        VERA.data0 = (shot->yPos >> 8);
 
-        if (shot.xPos > MAX_X) {
+        if (shot->xPos > MAX_X) {
             VERA.data0 = 0; // no Z-depth, no collisions, no flip
-            shot.isActive = 0;
+            shot->isActive = 0;
             g_numLiveShots--;
         } else {
             VERA.data0 = (3 << 2); // Z-depth of 3, visible
         }
 
-        g_liveShots[attr_index] = shot;
     }
 }
 
 void fire_shot() {
-    shot_t shot;
-    int8_t shot_id = -1;
+    shot_t *shot = NULL;
     for (uint8_t i = 0; i < MAX_SHOTS; i++) {
         if (!g_liveShots[i].isActive) {
-            shot = g_liveShots[i];
-            shot_id = i;
+            shot = &g_liveShots[i];
             break;
         }
     }
 
-    if (shot_id == -1) {
+    if (shot == NULL) {
         return;
     }
 
-    shot.xPos = g_shipXPos;
-    shot.yPos = g_shipYPos;
-    shot.isActive = 1;
-
-    g_liveShots[shot_id] = shot;
+    shot->xPos = g_shipXPos;
+    shot->yPos = g_shipYPos;
+    shot->isActive = 1;
 
 }
 
