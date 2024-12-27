@@ -1,3 +1,6 @@
+#include <cx16.h>
+#include <stdint.h>
+
 #pragma once
 #define SPRITE_ATTR_BASE 0x1fc08
 #define SPRITE_ATTR_ENTRY_SIZE 8
@@ -8,7 +11,7 @@
 #define MAX_Y 480
 #define MAX_SHOTS 6
 
-extern long g_joystick_state;
+extern JoyState g_joystick_state;
 
 extern int16_t g_shipXPos;
 extern int16_t g_shipYPos;

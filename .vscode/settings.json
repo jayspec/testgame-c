@@ -1,0 +1,6 @@
+{
+    "clangd.arguments": [
+        "--query-driver=c:/llvm-mos/bin/*clang*"
+    ],
+    "clangd.path": "c:/llvm-mos/bin/clangd.exe"
+}

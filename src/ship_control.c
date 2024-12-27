@@ -9,27 +9,27 @@ const unsigned long sprite1_pos_addr = SPRITE_ATTR_BASE + 2;
 void move_player_ship() {
 
     // right
-    if (!(g_joystick_state & JOY_RIGHT_MASK)) {
+    if (!(g_joystick_state.data0 & JOY_RIGHT_MASK)) {
         g_shipXPos += SHIP_SPEED;
         if (g_shipXPos > MAX_X) {
             g_shipXPos = MIN_X;
         }
     }
     // left
-    else if (!(g_joystick_state & JOY_LEFT_MASK)) {
+    else if (!(g_joystick_state.data0 & JOY_LEFT_MASK)) {
         g_shipXPos -= SHIP_SPEED;
         if (g_shipXPos < MIN_X) {
             g_shipXPos = MAX_X;
         }
     }   
     // down
-    if (!(g_joystick_state & JOY_DOWN_MASK)) {
+    if (!(g_joystick_state.data0 & JOY_DOWN_MASK)) {
         g_shipYPos += SHIP_SPEED;
         if (g_shipYPos > MAX_Y) {
             g_shipYPos = MIN_Y;
         }
     // up
-    } else if (!(g_joystick_state & JOY_UP_MASK)) {
+    } else if (!(g_joystick_state.data0 & JOY_UP_MASK)) {
         g_shipYPos -= SHIP_SPEED;
         if (g_shipYPos < MIN_Y) {
             g_shipYPos = MAX_Y;

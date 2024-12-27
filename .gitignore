@@ -1,8 +1,11 @@
 # Build dir
 build/
 
-# VS Code settings
-.vscode/
+# Cache dir
+.cache/
+
+# compile_commands for clang (specific to my system)
+compile_commands.json
 
 # Prerequisites
 *.d

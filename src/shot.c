@@ -64,7 +64,7 @@ void handle_shots() {
     }
 
     //printf("ns countdown: %d, joystick state: %lx\n", nextShotCountdown, g_joystick_state);
-    if ((nextShotCountdown == 0) && (!(g_joystick_state & JOY_BTN_B_MASK))) {
+    if ((nextShotCountdown == 0) && (!(g_joystick_state.data0 & JOY_BTN_B_MASK))) {
         //printf("fire\n");
         if (g_numLiveShots < MAX_SHOTS) {
             fire_shot();
