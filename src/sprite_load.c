@@ -1,8 +1,9 @@
+#include "globals.h"
+
 #include <stdint.h>
 #include <cx16.h>
 #include <cbm.h>
 
-#include "globals.h"
 
 #define SPRITE_VRAM_BASE_ADDR 0x00000
 #define PALETTE_VRAM_BASE_ADDR 0x1FA00

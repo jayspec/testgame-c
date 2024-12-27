@@ -1,6 +1,7 @@
+#include "globals.h"
+
 #include <stdint.h>
 #include <cx16.h>
-#include "globals.h"
 
 #define SHIP_START_X 150
 #define SHIP_START_Y 100

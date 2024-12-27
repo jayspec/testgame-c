@@ -1,3 +1,10 @@
+#ifndef __CX16__
+#define __CX16__
+#endif
+#ifndef __CBM__
+#define __CBM__
+#endif
+
 #include <cx16.h>
 #include <stdint.h>
 

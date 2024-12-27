@@ -1,7 +1,8 @@
+#include "globals.h"
+
 #include <stdint.h>
 #include <cx16.h>
 
-#include "globals.h"
 #include "sprite_load.h"
 #include "ship_control.h"
 #include "joystick.h"

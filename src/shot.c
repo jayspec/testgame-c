@@ -1,7 +1,8 @@
+#include "globals.h"
+
 #include <stdint.h>
 #include <cx16.h>
 #include <stdio.h>
-#include "globals.h"
 
 #define SHOT_SPEED 7
 #define SHOT_FRAME_DELAY 10

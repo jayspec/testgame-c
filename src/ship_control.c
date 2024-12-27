@@ -1,6 +1,7 @@
+#include "globals.h"
+
 #include <cx16.h>
 #include <stdint.h>
-#include "globals.h"
 
 #define SHIP_SPEED 5
 
