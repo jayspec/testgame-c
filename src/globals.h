@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef __CX16__
 #define __CX16__
 #endif
@@ -8,7 +10,6 @@
 #include <cx16.h>
 #include <stdint.h>
 
-#pragma once
 #define SPRITE_ATTR_BASE 0x1fc08
 #define SPRITE_ATTR_ENTRY_SIZE 8
 
