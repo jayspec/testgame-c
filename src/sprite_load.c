@@ -54,8 +54,8 @@ unsigned long load_objects_to_vram_at_index(const char* filename, unsigned long 
 
     // load the sprite
     cbm_k_setnam(filename);
-    // headerless load
-    cbm_k_setlfs(1, 8, 2);
+    // load with header
+    cbm_k_setlfs(0, 8, 0);
 
     if (upper) {
         cbm_k_load(3, vram_ptr);
