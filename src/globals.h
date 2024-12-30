@@ -19,6 +19,8 @@
 #define MAX_Y 480
 #define MAX_SHOTS 6
 
+#define SHIP_Z_DEPTH 3
+
 extern JoyState g_joystick_state;
 
 extern int16_t g_shipXPos;
