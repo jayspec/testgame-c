@@ -72,8 +72,13 @@ void move_player_ship() {
         VERA.data0 = zDepth << 2;
     }
 
-    VERA.address = horiz_ship_pos_addr & 0xffff;
-    VERA.address_hi = ((horiz_ship_pos_addr >> 16) | VERA_INC_1); // Hi byte of sprite 1 position address, stride 1    
+    // skip final line of vertical sprite attributes (height, width, palette)
+    int discard = VERA.data0;
+
+    //skip first two lines of horizontal sprite attributes (addr/mode)
+    discard = VERA.data0;
+    discard = VERA.data0;
+
     VERA.data0 = g_shipXPos;
     VERA.data0 = g_shipXPos >> 8;
     VERA.data0 = g_shipYPos;

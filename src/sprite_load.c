@@ -100,6 +100,7 @@ unsigned long set_sprite_attributes_at_index(uint8_t attr_index, uint8_t sprite_
     VERA.data0 = 0b0000000 | (zDepth << 2);
     // Palette offset 1, 32x32 pixels
     VERA.data0 = 0xa1;
+    // TODO: Configurable palette
 
     return attr_addr;
 }
