@@ -4,20 +4,30 @@
 #include <cx16.h>
 
 #include "sprite_load.h"
-#include "ship_control.h"
+#include "sprite_update.h"
+#include "ship.h"
 #include "joystick.h"
 #include "shot.h"
 
-int main() {
-    global_init();
+void initialize();
 
-    load_sprites();
+int main() {
+    initialize();
 
     while(1) {
-        get_joystick_state();
-        waitvsync();
+        refresh_joystick_state();
         move_player_ship();
         handle_shots();
+        waitvsync();
+        update_sprites();
     }
 
+    return 0;
+}
+
+void initialize() {
+    init_joystick();
+    init_ship();
+    init_shots();
+    load_sprites();
 }

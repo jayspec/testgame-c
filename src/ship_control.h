@@ -1,1 +1,0 @@
-extern void move_player_ship();

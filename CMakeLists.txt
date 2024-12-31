@@ -6,8 +6,8 @@ project(testgame)
 add_executable(
     testgame 
     src/main.c 
-    src/globals.c
-    src/ship_control.c
+    src/ship.c
     src/sprite_load.c
     src/joystick.c
-    src/shot.c)
+    src/shot.c
+    src/sprite_update.c)

@@ -4,10 +4,10 @@
 #include <cx16.h>
 #include <cbm.h>
 
+#include "sprites.h"
 
-#define SPRITE_VRAM_BASE_ADDR 0x00000
+
 #define PALETTE_VRAM_BASE_ADDR 0x1FA00
-#define SPRITE_SIZE 512 // 32x32 pixels, 4bpp
 #define PALETTE_LINE_SIZE 16 * 2 // 2 bytes per entry, 16 entries per line
 
 unsigned long load_objects_to_vram_at_index(const char * filename, unsigned long base_vram_addr, uint16_t object_size, uint8_t object_index);
@@ -29,23 +29,15 @@ void load_sprites() {
     unsigned long hero_ships_vram_addr = load_sprites_to_vram_at_index("assets/heros.img", 0);
     
     // vertical ship - don't display at start
-    set_sprite_attributes_at_index(0, 0, hero_ships_vram_addr, g_shipXPos, g_shipYPos, 0);
+    set_sprite_attributes_at_index(0, 0, hero_ships_vram_addr, SHIP_START_X, SHIP_START_Y, 0);
     // horizontal ship - display at start
-    set_sprite_attributes_at_index(1, 1, hero_ships_vram_addr, g_shipXPos, g_shipYPos, SHIP_Z_DEPTH);
+    set_sprite_attributes_at_index(1, 1, hero_ships_vram_addr, SHIP_START_X, SHIP_START_Y, SHIP_Z_DEPTH);
 
     // Load the shots.  There can be multiple shots, all pointing to the same image in vram
     unsigned long shot_vram_addr = load_sprites_to_vram_at_index("assets/shot.img", 2);
     for (uint8_t i = 0; i < MAX_SHOTS; i++) {
         // i + 2 because the ship is at 0 and 1
-        unsigned long sprite_attr_addr = set_sprite_attributes_at_index(i + 2, 0, shot_vram_addr, 0, 0, 0);
-        
-        shot_t shot;
-        shot.attr_address = sprite_attr_addr;
-        shot.isActive = 0;
-        shot.xPos = 0;
-        shot.yPos = 0;
-
-        g_liveShots[i] = shot;
+        unsigned long sprite_attr_addr = set_sprite_attributes_at_index(i + 2, 0, shot_vram_addr, 0, 0, 0);        
     }
 }
 
