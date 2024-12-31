@@ -14,5 +14,4 @@ typedef struct {
 
 extern void init_shots();
 extern void handle_shots();
-extern void advance_shot_at_index(uint8_t attr_index);
-extern void fire_shot();
+extern shot_t *get_shot_at_index(uint8_t index);

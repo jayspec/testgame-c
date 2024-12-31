@@ -14,6 +14,10 @@ static uint8_t nextShotCountdown = SHOT_FRAME_DELAY;
 static uint8_t numLiveShots;
 static shot_t liveShots[MAX_SHOTS];
 
+void advance_shot_at_index(uint8_t attr_index);
+void fire_shot();
+bool shot_is_off_screen(int16_t x, int16_t y);
+
 void init_shots() {
     numLiveShots = 0;
 }
@@ -38,29 +42,34 @@ void handle_shots() {
     }
 }
 
+shot_t *get_shot_at_index(uint8_t index) {
+    return &liveShots[index];
+}
+
 void advance_shot_at_index(uint8_t attr_index) {
     shot_t *shot = &liveShots[attr_index];
 
     if (shot->isActive) {
-        // VERA.address = (shot->attr_address + 2) & 0xffff;
-        // VERA.address_hi = (((shot->attr_address + 2) >> 16) | VERA_INC_1);
 
-        shot->xPos += SHOT_SPEED;
-
-        // VERA.data0 = shot->xPos;
-        // VERA.data0 = (shot->xPos >> 8);
-        // VERA.data0 = shot->yPos;
-        // VERA.data0 = (shot->yPos >> 8);
-
-        if (shot->xPos > MAX_X) {
-            // VERA.data0 = 0; // no Z-depth, no collisions, no flip
-            shot->isActive = 0;
-            numLiveShots--;
-        } else {
-            // VERA.data0 = (3 << 2); // Z-depth of 3, visible
+        if (shot->direction == RIGHT) {
+            shot->xPos += SHOT_SPEED;
+        } else if (shot->direction == LEFT) {
+            shot->xPos -= SHOT_SPEED;
+        } else if (shot->direction == DOWN) {
+            shot->yPos += SHOT_SPEED;
+        } else if (shot->direction == UP) {
+            shot->yPos -= SHOT_SPEED;
         }
 
+        if (shot_is_off_screen(shot->xPos, shot->yPos)) {
+            shot->isActive = 0;
+            numLiveShots--;
+        }
     }
+}
+
+bool shot_is_off_screen(int16_t x, int16_t y) {
+    return (x > MAX_X || x < MIN_X || y > MAX_Y || y < MIN_Y);
 }
 
 void fire_shot() {

@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <cx16.h>
 
+#include "shot.h"
 #include "sprites.h"
 #include "ship.h"
 
@@ -18,7 +19,7 @@ void update_sprites() {
     uint8_t flip;
     ship_state *ship = get_ship_state();
 
-    // Update the ship position
+    /* Update the ship position */
     for (uint8_t i = 0; i < NUM_SHIP_SPRITES; i++) {
         // skip the first two bytes - address and mode, which is wet when loaded
         VERA.data0;
@@ -54,6 +55,46 @@ void update_sprites() {
         VERA.data0 = ((zDepth << 2) | flip);
 
         // skip the last byte: height width, and palette offset
+        VERA.data0;
+
+    }
+    /* Update all the shots */
+
+
+    for (int i = 0; i < MAX_SHOTS; i++) {
+        shot_t* shot = get_shot_at_index(i);
+        // skip first two bytes
+        VERA.data0;
+        VERA.data0;
+
+        if (shot->isActive) {
+            VERA.data0 = shot->xPos;
+            VERA.data0 = (shot->xPos >> 8);
+            VERA.data0 = shot->yPos;
+            VERA.data0 = (shot->yPos >> 8);
+
+            zDepth = 3;
+            flip = 0;
+            if (shot->direction == LEFT) {
+                flip = H_FLIP;
+            } else if (shot->direction == DOWN) {
+                flip = V_FLIP;
+            }
+
+            VERA.data0 = ((zDepth << 2) | flip);
+
+        } else {
+            // ship is inactive - don't update X or Y
+            VERA.data0;
+            VERA.data0;
+            VERA.data0;
+            VERA.data0;
+
+            zDepth = 0;
+            VERA.data0 = (zDepth << 2);
+        }
+
+        // skip the last byte
         VERA.data0;
 
     }
