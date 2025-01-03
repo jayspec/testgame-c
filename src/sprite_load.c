@@ -13,7 +13,7 @@
 unsigned long load_objects_to_vram_at_index(const char * filename, unsigned long base_vram_addr, uint16_t object_size, uint8_t object_index);
 unsigned long load_sprites_to_vram_at_index(const char* filename, uint8_t sprite_index);
 unsigned long load_palette_to_vram_at_index(const char* filename, uint8_t palette_index);
-unsigned long set_sprite_attributes_at_index(uint8_t attr_index, uint8_t sprite_index, unsigned long vram_addr, int16_t xPos, int16_t yPos, uint8_t zDepth);
+unsigned long set_sprite_attributes_at_index(uint8_t attr_index, uint8_t sprite_index, uint8_t palette_index, unsigned long vram_addr, int16_t xPos, int16_t yPos, uint8_t zDepth);
 
 void load_sprites() {
 
@@ -30,13 +30,13 @@ void load_sprites() {
     // There are two versions of the ship on the sprite sheet, one vertical and one horizontal
     unsigned long hero_ships_vram_addr = load_sprites_to_vram_at_index("assets/heros.img", 0);
     
-    set_sprite_attributes_at_index(0, 1, hero_ships_vram_addr, SHIP_START_X, SHIP_START_Y, SHIP_Z_DEPTH);
+    set_sprite_attributes_at_index(0, 1, 1, hero_ships_vram_addr, SHIP_START_X, SHIP_START_Y, SHIP_Z_DEPTH);
 
     // Load the shots.  There can be multiple shots, all pointing to the same image in vram
     unsigned long shot_vram_addr = load_sprites_to_vram_at_index("assets/shot.img", 2);
     for (uint8_t i = 0; i < MAX_SHOTS; i++) {
         // i + 2 because the ship is at 0 and 1
-        unsigned long sprite_attr_addr = set_sprite_attributes_at_index(i + 1, 0, shot_vram_addr, 0, 0, 0);        
+        unsigned long sprite_attr_addr = set_sprite_attributes_at_index(i + 1, 0, 2, shot_vram_addr, 0, 0, 0);        
     }
 }
 
@@ -69,7 +69,7 @@ unsigned long load_palette_to_vram_at_index(const char* filename, uint8_t palett
     return load_objects_to_vram_at_index(filename, PALETTE_VRAM_BASE_ADDR, PALETTE_LINE_SIZE, palette_index);
 }
 
-unsigned long set_sprite_attributes_at_index(uint8_t attr_index, uint8_t sprite_index, unsigned long vram_addr, int16_t xPos, int16_t yPos, uint8_t zDepth) {
+unsigned long set_sprite_attributes_at_index(uint8_t attr_index, uint8_t sprite_index, uint8_t palette_index, unsigned long vram_addr, int16_t xPos, int16_t yPos, uint8_t zDepth) {
     unsigned long attr_addr = (SPRITE_ATTR_BASE + (SPRITE_ATTR_ENTRY_SIZE * attr_index));
 
     VERA.control = 0; // Use VERA port 0
@@ -89,9 +89,9 @@ unsigned long set_sprite_attributes_at_index(uint8_t attr_index, uint8_t sprite_
 
     // No flip, no collision mask, specified Z-depth
     VERA.data0 = 0b0000000 | (zDepth << 2);
-    // Palette offset 1, 32x32 pixels
-    VERA.data0 = 0xa1;
-    // TODO: Configurable palette
+
+    // Size = 32x32 pixels, w/ configurable palette offset
+    VERA.data0 = ((SPRITE_HEIGHT << 6) | (SPRITE_WIDTH << 4) | palette_index);
 
     return attr_addr;
 }

@@ -1,9 +1,13 @@
 #define SPRITE_VRAM_BASE_ADDR 0x00000
-#define SPRITE_SIZE 512 // 32x32 pixels, 4bpp
 #define SPRITE_ATTR_BASE 0x1fc08
 #define SPRITE_ATTR_ENTRY_SIZE 8
 
 #define NUM_SPRITES 4
+
+/* sprite size = 32 x 32 @ 4bpp */
+#define SPRITE_SIZE 512
+#define SPRITE_HEIGHT 0x02
+#define SPRITE_WIDTH 0x02
 
 #define VERTICAL_SHIP_INDEX 0
 #define HORIZONTAL_SHIP_INDEX 1
