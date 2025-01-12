@@ -30,7 +30,7 @@ void update_sprites() {
     }
 
     /* Update the ship position */
-    // Set the address in VRAM where the sprite is located
+    // Set the address in VRAM where the ship sprite is located
     VERA.data0 = ((SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * sprite_num)) >> 5);
     VERA.data0 = ((SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * sprite_num)) >> 13); // Bit 8 = Mode 0 (4bpp, 16 color)
 
@@ -39,7 +39,6 @@ void update_sprites() {
     VERA.data0 = ship->yPos;
     VERA.data0 = ship->yPos >> 8;
 
-    
     if (ship->direction == LEFT) {
         flip = H_FLIP;
     } else if (ship->direction == DOWN) {
@@ -64,8 +63,7 @@ void update_sprites() {
             sprite_num = SHOT_VERTICAL;
         }
 
-        /* Update the ship position */
-        // Set the address in VRAM where the sprite is located
+        // Set the address in VRAM where the shot sprite is located
         VERA.data0 = ((SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * sprite_num)) >> 5);
         VERA.data0 = ((SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * sprite_num)) >> 13); // Bit 8 = Mode 0 (4bpp, 16 color)
 
