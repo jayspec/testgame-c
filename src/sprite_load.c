@@ -26,17 +26,24 @@ void load_sprites() {
     // load at index 1, because (for now) we don't want to blow away the palette for the background
     unsigned long ship_palette_vram_addr = load_palette_to_vram_at_index("assets/heros.pal", 1);
     unsigned long shot_palette_vram_addr = load_palette_to_vram_at_index("assets/shot.pal", 2);
+    unsigned long enemy_palette_vram_addr = load_palette_to_vram_at_index("assets/enemy.pal", 3);
 
+    int sprite_attr_counter = 0;
+    
     // There are two versions of the ship on the sprite sheet, one vertical and one horizontal
     unsigned long hero_ships_vram_addr = load_sprites_to_vram_at_index("assets/heros.img", 0);
     
-    set_sprite_attributes_at_index(0, 1, 1, hero_ships_vram_addr, SHIP_START_X, SHIP_START_Y, SHIP_Z_DEPTH);
+    set_sprite_attributes_at_index(sprite_attr_counter++, 1, 1, hero_ships_vram_addr, SHIP_START_X, SHIP_START_Y, SHIP_Z_DEPTH);
 
     // Load the shots.  There can be multiple shots, all pointing to the same image in vram
     unsigned long shot_vram_addr = load_sprites_to_vram_at_index("assets/shot.img", 2);
     for (uint8_t i = 0; i < MAX_SHOTS; i++) {
-        // i + 2 because the ship is at 0 and 1
-        unsigned long sprite_attr_addr = set_sprite_attributes_at_index(i + 1, 0, 2, shot_vram_addr, 0, 0, 0);        
+        set_sprite_attributes_at_index(sprite_attr_counter++, 0, 2, shot_vram_addr, 0, 0, 0);        
+    }
+
+    unsigned long enemy_vram_addr = load_sprites_to_vram_at_index("assets/enemy.img", 4);
+    for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
+        set_sprite_attributes_at_index(sprite_attr_counter++, 0, 3, enemy_vram_addr, 0, 0, 0);
     }
 }
 

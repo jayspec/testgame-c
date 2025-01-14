@@ -1,13 +1,9 @@
-#include "globals.h"
-
-#include <stdint.h>
-#include <cx16.h>
-
 #include "sprite_load.h"
 #include "sprite_update.h"
 #include "ship.h"
 #include "joystick.h"
 #include "shot.h"
+#include "enemy.h"
 
 void initialize();
 
@@ -18,6 +14,7 @@ int main() {
         refresh_joystick_state();
         move_player_ship();
         handle_shots();
+        handle_enemies();
         waitvsync();
         update_sprites();
     }
@@ -29,5 +26,6 @@ void initialize() {
     init_joystick();
     init_ship();
     init_shots();
+    init_enemies();
     load_sprites();
 }

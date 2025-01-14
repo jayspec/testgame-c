@@ -1,3 +1,4 @@
+#include "enemy.h"
 #include "globals.h"
 
 #include <stdint.h>
@@ -6,11 +7,12 @@
 #include "shot.h"
 #include "sprites.h"
 #include "ship.h"
+#include "enemy.h"
 
 #define V_FLIP 0x02
 #define H_FLIP 0x01
 
-typedef enum { SHIP_VERTICAL, SHIP_HORIZONTAL, SHOT_VERTICAL, SHOT_HORIZONTAL } sprite_type;
+typedef enum { SHIP_VERTICAL, SHIP_HORIZONTAL, SHOT_VERTICAL, SHOT_HORIZONTAL, ENEMY_VERTICAL, ENEMY_HORIZONTAL } sprite_type;
 
 void update_sprites() {
     VERA.address = SPRITE_ATTR_BASE & 0xffff;
@@ -98,5 +100,54 @@ void update_sprites() {
         VERA.data0;
 
     }
+
+    /* Update all the enemies */
+
+    for (int i = 0; i < MAX_ENEMIES; i++) {
+        enemy_t* enemy = get_enemy_at_index(i);
+
+        if (enemy->direction == LEFT || enemy->direction == RIGHT) {
+            sprite_num = ENEMY_HORIZONTAL;
+        } else {
+            sprite_num = ENEMY_VERTICAL;
+        }
+
+        // Set the address in VRAM where the shot sprite is located
+        VERA.data0 = ((SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * sprite_num)) >> 5);
+        VERA.data0 = ((SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * sprite_num)) >> 13); // Bit 8 = Mode 0 (4bpp, 16 color)
+
+        if (enemy->isActive) {
+            VERA.data0 = enemy->xPos;
+            VERA.data0 = (enemy->xPos >> 8);
+            VERA.data0 = enemy->yPos;
+            VERA.data0 = (enemy->yPos >> 8);
+
+            zDepth = 3;
+            flip = 0;
+            if (enemy->direction == LEFT) {
+                flip = H_FLIP;
+            } else if (enemy->direction == DOWN) {
+                flip = V_FLIP;
+            }
+
+            VERA.data0 = ((zDepth << 2) | flip);
+
+        } else {
+            // shot is inactive - don't update X or Y
+            VERA.data0;
+            VERA.data0;
+            VERA.data0;
+            VERA.data0;
+
+            zDepth = 0;
+            VERA.data0 = (zDepth << 2);
+        }
+
+        // skip the last byte
+        VERA.data0;
+
+    }
+
+
     
 }

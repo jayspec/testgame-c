@@ -21,6 +21,12 @@
 #define SHOT_FRAME_DELAY 10
 #define MAX_SHOTS 6
 
+#define ENEMY_SPEED 2
+#define MAX_ENEMIES 2
+#define ENEMY_DELAY 20
+
+#define DEBUG
+
 typedef enum direction {
     UP,
     DOWN,

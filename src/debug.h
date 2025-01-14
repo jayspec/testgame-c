@@ -1,0 +1,1 @@
+extern void debug_to_emu_console(char *message);

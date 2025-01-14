@@ -20,8 +20,6 @@ ship_state *get_ship_state() {
 }
 
 void move_player_ship() {
-    uint8_t zDepth;
-
     JoyState joystick_state = get_joystick_state();
     // right
     if (!(joystick_state.data0 & JOY_RIGHT_MASK)) {
