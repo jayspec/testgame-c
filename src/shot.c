@@ -23,7 +23,6 @@ void init_shots() {
 }
 
 void handle_shots() {
-
     for (uint8_t i = 0; i < MAX_SHOTS; i++) {
         advance_shot_at_index(i);
     }

@@ -74,37 +74,24 @@ bool enemy_is_off_screen(int16_t x, int16_t y) {
 
 void create_enemy() {
     if (nextEnemyCountdown > 0 || numEnemies >= MAX_ENEMIES) {
-#ifdef DEBUG
-        debug_to_emu_console("No enemy.");
-#endif
         return;
     }
     nextEnemyCountdown = ENEMY_DELAY;
     numEnemies++;
-#ifdef DEBUG
-    debug_to_emu_console("create_enemy");
-    //printf("Num: %d, CD: %d", numEnemies, nextEnemyCountdown);
-#endif
 
     enemy_t *enemy = NULL;
-    debug_to_emu_console("looking for enemy");
     for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
         if (!enemies[i].isActive) {
-            debug_to_emu_console("found inactive enemy");
             enemy = &enemies[i];
             break;
         }
     }
 
     if (enemy == NULL) {
-        debug_to_emu_console("cant find enemy");
         return;
     }
 
     direction dir = (rand() % 4);
-#ifdef DEBUG
-    debug_to_emu_console("Setting direction");
-#endif
     enemy->direction = dir;
     enemy->isActive = true;
 
@@ -129,9 +116,5 @@ void create_enemy() {
             // do nothing
             break;
     }
-
-#ifdef DEBUG
-    //printf("Enemy at x: %d y: %d", enemy->xPos, enemy->yPos);
-#endif
 }
 

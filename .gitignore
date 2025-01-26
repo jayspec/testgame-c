@@ -7,6 +7,9 @@ build/
 # compile_commands for clang (specific to my system)
 compile_commands.json
 
+# emulator dump files
+dump*.bin
+
 # Prerequisites
 *.d
 

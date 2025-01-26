@@ -7,7 +7,7 @@
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "script": "C:/Users/JasonSpecland/dev/x16/x16emu/x16emu.exe",
-            "args": ["-scale", "4", "-prg", "./build/testgame", "-run"],
+            "args": ["-scale", "4", "-prg", "./build/testgame", "-run", "-dump", "R", "-debug"],
             "preLaunchTask": "Build and Run"
         }
     ]
