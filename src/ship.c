@@ -13,6 +13,7 @@ void init_ship() {
     ship.xPos = SHIP_START_X;
     ship.yPos = SHIP_START_Y;
     ship.direction = RIGHT;
+    ship.collisionMask = 0b0001;
 }
 
 ship_state *get_ship_state() {

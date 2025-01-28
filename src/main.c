@@ -1,3 +1,4 @@
+#include "globals.h"
 #include "sprite_load.h"
 #include "sprite_update.h"
 #include "ship.h"
@@ -35,17 +36,18 @@ void initialize() {
     init_ship();
     init_shots();
     init_enemies();
-    load_sprites();
+    load_sprite_sheets();
 }
 
 void init_irq() {
+    VERA.irq_enable = 0b00000101;
     uint8_t (*handler)(void) = irq_handler;
     set_irq(handler);
 }
 
 uint8_t __attribute__((interrupt_norecurse,no_isr)) irq_handler() {
     if (VERA.irq_flags & 0b100) {
-        debug_to_emu_console("collision");
+        VERA.irq_flags = 0b100;
         return 1;
     } else {
         return 0;

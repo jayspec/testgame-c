@@ -11,6 +11,7 @@ typedef struct {
     int16_t yPos;
     bool isActive;
     direction direction;
+    uint8_t collisionMask;
 } enemy_t;
 
 extern void init_enemies();

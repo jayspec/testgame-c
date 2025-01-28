@@ -88,6 +88,7 @@ void fire_shot() {
     shot->xPos = ship->xPos;
     shot->yPos = ship->yPos;
     shot->direction = ship->direction;
+    shot->collisionMask = 0b0010;
     shot->isActive = true;
 }
 

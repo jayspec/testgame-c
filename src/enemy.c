@@ -94,6 +94,7 @@ void create_enemy() {
     direction dir = (rand() % 4);
     enemy->direction = dir;
     enemy->isActive = true;
+    enemy->collisionMask = 0b0011;
 
     switch(dir) {
         case UP:

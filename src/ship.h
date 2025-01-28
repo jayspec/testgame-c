@@ -7,6 +7,7 @@ typedef struct ship_state {
     int16_t xPos;
     int16_t yPos;
     direction direction;
+    uint8_t collisionMask;
 } ship_state;
 
 extern void init_ship();

@@ -49,7 +49,7 @@ void update_sprites() {
         flip = 0;
     }
 
-    VERA.data0 = ((SHIP_Z_DEPTH << 2) | flip);
+    VERA.data0 = ((ship->collisionMask << 4) | (SHIP_Z_DEPTH << 2) | flip);
 
     // skip the last byte: height width, and palette offset
     VERA.data0;
@@ -83,7 +83,7 @@ void update_sprites() {
                 flip = V_FLIP;
             }
 
-            VERA.data0 = ((zDepth << 2) | flip);
+            VERA.data0 = ((shot->collisionMask << 4) | (zDepth << 2) | flip);
 
         } else {
             // shot is inactive - don't update X or Y
@@ -130,7 +130,7 @@ void update_sprites() {
                 flip = V_FLIP;
             }
 
-            VERA.data0 = ((zDepth << 2) | flip);
+            VERA.data0 = ((enemy->collisionMask << 4) | (zDepth << 2) | flip);
 
         } else {
             // shot is inactive - don't update X or Y
