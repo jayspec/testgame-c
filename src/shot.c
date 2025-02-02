@@ -1,3 +1,4 @@
+#include "game_objects.h"
 #include "globals.h"
 
 #include <stdint.h>
@@ -5,16 +6,14 @@
 #include <stdbool.h>
 
 #include "shot.h"
-#include "ship.h"
 #include "joystick.h"
 
 
 static uint8_t nextShotCountdown = SHOT_FRAME_DELAY;
 
 static uint8_t numLiveShots;
-static shot_t liveShots[MAX_SHOTS];
 
-void advance_shot_at_index(uint8_t attr_index);
+void advance_shot_at_index(uint8_t shot_index);
 void fire_shot();
 bool shot_is_off_screen(int16_t x, int16_t y);
 
@@ -36,32 +35,35 @@ void handle_shots() {
         if (numLiveShots < MAX_SHOTS) {
             fire_shot();
             nextShotCountdown = SHOT_FRAME_DELAY;
-            numLiveShots++;
         }
     }
 }
 
-shot_t *get_shot_at_index(uint8_t index) {
-    return &liveShots[index];
-}
+void advance_shot_at_index(uint8_t shot_index) {
+    uint8_t shot_object_index = shot_index + SHOT_FIRST_OBJ_INDEX;
 
-void advance_shot_at_index(uint8_t attr_index) {
-    shot_t *shot = &liveShots[attr_index];
+    if (game_objects.isActive[shot_object_index]) {
 
-    if (shot->isActive) {
-
-        if (shot->direction == RIGHT) {
-            shot->xPos += SHOT_SPEED;
-        } else if (shot->direction == LEFT) {
-            shot->xPos -= SHOT_SPEED;
-        } else if (shot->direction == DOWN) {
-            shot->yPos += SHOT_SPEED;
-        } else if (shot->direction == UP) {
-            shot->yPos -= SHOT_SPEED;
+        switch(game_objects.direction[shot_object_index]) {
+            case RIGHT:
+                game_objects.xPos[shot_object_index] += SHOT_SPEED;
+                break;
+            case LEFT:
+                game_objects.xPos[shot_object_index] -= SHOT_SPEED;
+                break;
+            case DOWN:
+                game_objects.yPos[shot_object_index] += SHOT_SPEED;
+                break;
+            case UP:
+                game_objects.yPos[shot_object_index] -= SHOT_SPEED;
+                break;
+            default:
+                // do nothing
+                break;
         }
 
-        if (shot_is_off_screen(shot->xPos, shot->yPos)) {
-            shot->isActive = 0;
+        if (shot_is_off_screen(game_objects.xPos[shot_object_index], game_objects.yPos[shot_object_index])) {
+            game_objects.isActive[shot_object_index] = false;
             numLiveShots--;
         }
     }
@@ -72,23 +74,24 @@ bool shot_is_off_screen(int16_t x, int16_t y) {
 }
 
 void fire_shot() {
-    shot_t *shot = NULL;
-    for (uint8_t i = 0; i < MAX_SHOTS; i++) {
-        if (!liveShots[i].isActive) {
-            shot = &liveShots[i];
+    int8_t new_shot_index = -1;
+    for (uint8_t i = SHOT_FIRST_OBJ_INDEX; i <= SHOT_LAST_OBJ_INDEX; i++) {
+        if (!game_objects.isActive[i]) {
+            new_shot_index = i;
+            numLiveShots++;
             break;
         }
     }
 
-    if (shot == NULL) {
+    if (new_shot_index == -1) {
         return;
     }
 
-    ship_state *ship = get_ship_state();
-    shot->xPos = ship->xPos;
-    shot->yPos = ship->yPos;
-    shot->direction = ship->direction;
-    shot->collisionMask = 0b0010;
-    shot->isActive = true;
+    game_objects.xPos[new_shot_index] = game_objects.xPos[SHIP_OBJ_INDEX];
+    game_objects.yPos[new_shot_index] = game_objects.yPos[SHIP_OBJ_INDEX];
+    game_objects.direction[new_shot_index] = game_objects.direction[SHIP_OBJ_INDEX];
+
+    game_objects.collisionMask[new_shot_index] = 0b0010;
+    game_objects.isActive[new_shot_index] = true;
 }
 

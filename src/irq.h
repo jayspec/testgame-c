@@ -1,1 +1,1 @@
-extern void set_irq(void *irq_handler_fn);
+extern void set_irq(void *irq_handler_fn) __attribute__((leaf));

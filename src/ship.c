@@ -2,56 +2,52 @@
 
 #include <cx16.h>
 #include <stdint.h>
+#include "game_objects.h"
 #include "ship.h"
 #include "joystick.h"
 
 
-static ship_state ship;
 static const direction default_direction = RIGHT;
 
 void init_ship() {
-    ship.xPos = SHIP_START_X;
-    ship.yPos = SHIP_START_Y;
-    ship.direction = RIGHT;
-    ship.collisionMask = 0b0001;
-}
-
-ship_state *get_ship_state() {
-    return &ship;
+    game_objects.xPos[SHIP_OBJ_INDEX] = SHIP_START_X;
+    game_objects.yPos[SHIP_OBJ_INDEX] = SHIP_START_Y;
+    game_objects.direction[SHIP_OBJ_INDEX] = default_direction;
+    game_objects.collisionMask[SHIP_OBJ_INDEX] = 0b0001;
 }
 
 void move_player_ship() {
     JoyState joystick_state = get_joystick_state();
     // right
     if (!(joystick_state.data0 & JOY_RIGHT_MASK)) {
-        ship.xPos += SHIP_SPEED;
-        if (ship.xPos > MAX_X) {
-            ship.xPos = MIN_X;
+        game_objects.xPos[SHIP_OBJ_INDEX] += SHIP_SPEED;
+        if (game_objects.xPos[SHIP_OBJ_INDEX] > MAX_X) {
+            game_objects.xPos[SHIP_OBJ_INDEX] = MIN_X;
         }
-        ship.direction = RIGHT;
+        game_objects.direction[SHIP_OBJ_INDEX] = RIGHT;
     }
     // left
     else if (!(joystick_state.data0 & JOY_LEFT_MASK)) {
-        ship.xPos -= SHIP_SPEED;
-        if (ship.xPos < MIN_X) {
-            ship.xPos = MAX_X;
+        game_objects.xPos[SHIP_OBJ_INDEX] -= SHIP_SPEED;
+        if (game_objects.xPos[SHIP_OBJ_INDEX] < MIN_X) {
+            game_objects.xPos[SHIP_OBJ_INDEX] = MAX_X;
         }
-        ship.direction = LEFT;
+        game_objects.direction[SHIP_OBJ_INDEX] = LEFT;
     }   
     // down
     if (!(joystick_state.data0 & JOY_DOWN_MASK)) {
-        ship.yPos += SHIP_SPEED;
-        if (ship.yPos > MAX_Y) {
-            ship.yPos = MIN_Y;
+        game_objects.yPos[SHIP_OBJ_INDEX] += SHIP_SPEED;
+        if (game_objects.yPos[SHIP_OBJ_INDEX] > MAX_Y) {
+            game_objects.yPos[SHIP_OBJ_INDEX] = MIN_Y;
         }
-        ship.direction = DOWN;
+        game_objects.direction[SHIP_OBJ_INDEX] = DOWN;
     // up
     } else if (!(joystick_state.data0 & JOY_UP_MASK)) {
-        ship.yPos -= SHIP_SPEED;
-        if (ship.yPos < MIN_Y) {
-            ship.yPos = MAX_Y;
+        game_objects.yPos[SHIP_OBJ_INDEX] -= SHIP_SPEED;
+        if (game_objects.yPos[SHIP_OBJ_INDEX] < MIN_Y) {
+            game_objects.yPos[SHIP_OBJ_INDEX] = MAX_Y;
         }
-        ship.direction = UP;
+        game_objects.direction[SHIP_OBJ_INDEX] = UP;
     }
 
 }

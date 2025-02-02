@@ -6,17 +6,17 @@
 #include "globals.h"
 #include <cx16.h>
 
+#include "game_objects.h"
 #include "enemy.h"
 
 #ifdef DEBUG
 #include "debug.h"
+#include <stdio.h>
 #endif
-
-static enemy_t enemies[MAX_ENEMIES];
 
 static uint8_t nextEnemyCountdown = ENEMY_DELAY;
 static uint8_t numEnemies;
-static unsigned long random_seed;
+static unsigned int random_seed;
 
 void advance_enemy_at_index(uint8_t attr_index);
 bool enemy_is_off_screen(int16_t x, int16_t y);
@@ -42,27 +42,31 @@ void handle_enemies() {
 
 }
 
-enemy_t *get_enemy_at_index(uint8_t index) {
-    return &enemies[index];
-}
+void advance_enemy_at_index(uint8_t enemy_index) {
+    uint8_t enemy_object_index = ENEMY_FIRST_OBJ_INDEX + enemy_index;
 
-void advance_enemy_at_index(uint8_t attr_index) {
-    enemy_t *enemy = &enemies[attr_index];
+    if (game_objects.isActive[enemy_object_index]) {
 
-    if (enemy->isActive) {
-
-        if (enemy->direction == RIGHT) {
-            enemy->xPos += ENEMY_SPEED;
-        } else if (enemy->direction == LEFT) {
-            enemy->xPos -= ENEMY_SPEED;
-        } else if (enemy->direction == DOWN) {
-            enemy->yPos += ENEMY_SPEED;
-        } else if (enemy->direction == UP) {
-            enemy->yPos -= ENEMY_SPEED;
+        switch(game_objects.direction[enemy_object_index]) {
+            case RIGHT:
+                game_objects.xPos[enemy_object_index] += ENEMY_SPEED;
+                break;
+            case LEFT:
+                game_objects.xPos[enemy_object_index] -= ENEMY_SPEED;
+                break;
+            case DOWN:
+                game_objects.yPos[enemy_object_index] += ENEMY_SPEED;
+                break;
+            case UP:
+                game_objects.yPos[enemy_object_index] -= ENEMY_SPEED;
+                break;
+            default:
+                // do nothing
+                break;
         }
 
-        if (enemy_is_off_screen(enemy->xPos, enemy->yPos)) {
-            enemy->isActive = false;
+        if (enemy_is_off_screen(game_objects.xPos[enemy_object_index], game_objects.yPos[enemy_object_index])) {
+            game_objects.isActive[enemy_object_index] = false;
             numEnemies--;
         }
     }
@@ -77,41 +81,42 @@ void create_enemy() {
         return;
     }
     nextEnemyCountdown = ENEMY_DELAY;
-    numEnemies++;
 
-    enemy_t *enemy = NULL;
-    for (uint8_t i = 0; i < MAX_ENEMIES; i++) {
-        if (!enemies[i].isActive) {
-            enemy = &enemies[i];
+    int8_t enemy_index_to_create = -1;
+    for (uint8_t i = ENEMY_FIRST_OBJ_INDEX; i <= ENEMY_LAST_OBJ_INDEX; i++) {
+        if (!game_objects.isActive[i]) {
+            numEnemies++;
+            enemy_index_to_create = i;
             break;
         }
     }
 
-    if (enemy == NULL) {
+    if (enemy_index_to_create == -1) {
         return;
     }
 
-    direction dir = (rand() % 4);
-    enemy->direction = dir;
-    enemy->isActive = true;
-    enemy->collisionMask = 0b0011;
+    // Using abs() to fix bug in library?  rand() returns negative numbers (I don't think there's an overflow...)
+    direction dir = (abs(rand()) % 4);
+    game_objects.direction[enemy_index_to_create] = dir;
+    game_objects.isActive[enemy_index_to_create] = true;
+    game_objects.collisionMask[enemy_index_to_create] = 0b0011;
 
     switch(dir) {
         case UP:
-            enemy->xPos = MAX_X / 2;
-            enemy->yPos = MAX_Y - 1;
+            game_objects.xPos[enemy_index_to_create] = MAX_X / 2;
+            game_objects.yPos[enemy_index_to_create] = MAX_Y - 1;
             break;
         case DOWN:
-            enemy->xPos = MAX_X / 2;
-            enemy->yPos = MIN_Y + 1;
+            game_objects.xPos[enemy_index_to_create] = MAX_X / 2;
+            game_objects.yPos[enemy_index_to_create] = MIN_Y + 1;
             break;
         case LEFT:
-            enemy->xPos = MAX_X - 1;
-            enemy->yPos = MAX_Y / 2;
+            game_objects.xPos[enemy_index_to_create] = MAX_X - 1;
+            game_objects.yPos[enemy_index_to_create] = MAX_Y / 2;
             break;
         case RIGHT:
-            enemy->xPos = MIN_X + 1;
-            enemy->yPos = MAX_Y / 2;
+            game_objects.xPos[enemy_index_to_create] = MIN_X + 1;
+            game_objects.yPos[enemy_index_to_create] = MAX_Y / 2;
             break;
         default:
             // do nothing

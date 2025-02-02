@@ -1,13 +1,12 @@
-#include "enemy.h"
 #include "globals.h"
 
 #include <stdint.h>
 #include <cx16.h>
 
-#include "shot.h"
+#include "game_objects.h"
 #include "sprites.h"
-#include "ship.h"
-#include "enemy.h"
+
+#include "debug.h"
 
 #define V_FLIP 0x02
 #define H_FLIP 0x01
@@ -23,9 +22,7 @@ void update_sprites() {
     uint8_t flip;
     uint8_t sprite_num;
 
-    ship_state *ship = get_ship_state();
-
-    if (ship->direction == LEFT || ship->direction == RIGHT) {
+    if (game_objects.direction[SHIP_OBJ_INDEX] == LEFT || game_objects.direction[SHIP_OBJ_INDEX] == RIGHT) {
         sprite_num = SHIP_HORIZONTAL;
     } else {
         sprite_num = SHIP_VERTICAL;
@@ -36,30 +33,29 @@ void update_sprites() {
     VERA.data0 = ((SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * sprite_num)) >> 5);
     VERA.data0 = ((SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * sprite_num)) >> 13); // Bit 8 = Mode 0 (4bpp, 16 color)
 
-    VERA.data0 = ship->xPos;
-    VERA.data0 = ship->xPos >> 8;
-    VERA.data0 = ship->yPos;
-    VERA.data0 = ship->yPos >> 8;
 
-    if (ship->direction == LEFT) {
+    VERA.data0 = game_objects.xPos[SHIP_OBJ_INDEX];
+    VERA.data0 = game_objects.xPos[SHIP_OBJ_INDEX] >> 8;
+    VERA.data0 = game_objects.yPos[SHIP_OBJ_INDEX];
+    VERA.data0 = game_objects.yPos[SHIP_OBJ_INDEX] >> 8;
+
+    if (game_objects.direction[SHIP_OBJ_INDEX] == LEFT) {
         flip = H_FLIP;
-    } else if (ship->direction == DOWN) {
+    } else if (game_objects.direction[SHIP_OBJ_INDEX] == DOWN) {
         flip = V_FLIP;
     } else {
         flip = 0;
     }
 
-    VERA.data0 = ((ship->collisionMask << 4) | (SHIP_Z_DEPTH << 2) | flip);
+    VERA.data0 = ((game_objects.collisionMask[SHIP_OBJ_INDEX] << 4) | (SHIP_Z_DEPTH << 2) | flip);
 
     // skip the last byte: height width, and palette offset
     VERA.data0;
 
     /* Update all the shots */
 
-    for (int i = 0; i < MAX_SHOTS; i++) {
-        shot_t* shot = get_shot_at_index(i);
-
-        if (shot->direction == LEFT || shot->direction == RIGHT) {
+    for (int currentShot = SHOT_FIRST_OBJ_INDEX; currentShot <= SHOT_LAST_OBJ_INDEX; currentShot++) {
+        if (game_objects.direction[currentShot] == LEFT || game_objects.direction[currentShot] == RIGHT) {
             sprite_num = SHOT_HORIZONTAL;
         } else {
             sprite_num = SHOT_VERTICAL;
@@ -69,21 +65,21 @@ void update_sprites() {
         VERA.data0 = ((SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * sprite_num)) >> 5);
         VERA.data0 = ((SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * sprite_num)) >> 13); // Bit 8 = Mode 0 (4bpp, 16 color)
 
-        if (shot->isActive) {
-            VERA.data0 = shot->xPos;
-            VERA.data0 = (shot->xPos >> 8);
-            VERA.data0 = shot->yPos;
-            VERA.data0 = (shot->yPos >> 8);
+        if (game_objects.isActive[currentShot]) {
+            VERA.data0 = game_objects.xPos[currentShot];
+            VERA.data0 = (game_objects.xPos[currentShot] >> 8);
+            VERA.data0 = game_objects.yPos[currentShot];
+            VERA.data0 = (game_objects.yPos[currentShot] >> 8);
 
             zDepth = 3;
             flip = 0;
-            if (shot->direction == LEFT) {
+            if (game_objects.direction[currentShot] == LEFT) {
                 flip = H_FLIP;
-            } else if (shot->direction == DOWN) {
+            } else if (game_objects.direction[currentShot] == DOWN) {
                 flip = V_FLIP;
             }
 
-            VERA.data0 = ((shot->collisionMask << 4) | (zDepth << 2) | flip);
+            VERA.data0 = ((game_objects.collisionMask[currentShot] << 4) | (zDepth << 2) | flip);
 
         } else {
             // shot is inactive - don't update X or Y
@@ -103,10 +99,9 @@ void update_sprites() {
 
     /* Update all the enemies */
 
-    for (int i = 0; i < MAX_ENEMIES; i++) {
-        enemy_t* enemy = get_enemy_at_index(i);
+    for (int currentEnemy = ENEMY_FIRST_OBJ_INDEX; currentEnemy <= ENEMY_LAST_OBJ_INDEX; currentEnemy++) {
 
-        if (enemy->direction == LEFT || enemy->direction == RIGHT) {
+        if (game_objects.direction[currentEnemy] == LEFT || game_objects.direction[currentEnemy] == RIGHT) {
             sprite_num = ENEMY_HORIZONTAL;
         } else {
             sprite_num = ENEMY_VERTICAL;
@@ -116,21 +111,21 @@ void update_sprites() {
         VERA.data0 = ((SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * sprite_num)) >> 5);
         VERA.data0 = ((SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * sprite_num)) >> 13); // Bit 8 = Mode 0 (4bpp, 16 color)
 
-        if (enemy->isActive) {
-            VERA.data0 = enemy->xPos;
-            VERA.data0 = (enemy->xPos >> 8);
-            VERA.data0 = enemy->yPos;
-            VERA.data0 = (enemy->yPos >> 8);
+        if (game_objects.isActive[currentEnemy]) {
+            VERA.data0 = game_objects.xPos[currentEnemy];
+            VERA.data0 = (game_objects.xPos[currentEnemy] >> 8);
+            VERA.data0 = game_objects.yPos[currentEnemy];
+            VERA.data0 = (game_objects.yPos[currentEnemy] >> 8);
 
             zDepth = 3;
             flip = 0;
-            if (enemy->direction == LEFT) {
+            if (game_objects.direction[currentEnemy] == LEFT) {
                 flip = H_FLIP;
-            } else if (enemy->direction == DOWN) {
+            } else if (game_objects.direction[currentEnemy] == DOWN) {
                 flip = V_FLIP;
             }
 
-            VERA.data0 = ((enemy->collisionMask << 4) | (zDepth << 2) | flip);
+            VERA.data0 = ((game_objects.collisionMask[currentEnemy] << 4) | (zDepth << 2) | flip);
 
         } else {
             // shot is inactive - don't update X or Y

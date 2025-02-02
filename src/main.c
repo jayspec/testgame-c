@@ -1,4 +1,3 @@
-#include "globals.h"
 #include "sprite_load.h"
 #include "sprite_update.h"
 #include "ship.h"

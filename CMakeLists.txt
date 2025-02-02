@@ -14,4 +14,5 @@ add_executable(
     src/sprite_update.c
     src/enemy.c
     src/debug.c
-    src/irq.s)
+    src/irq.s
+    src/game_objects.c)
