@@ -6,7 +6,9 @@
 #include "game_objects.h"
 #include "sprites.h"
 
+#ifdef DEBUG
 #include "debug.h"
+#endif
 
 #define V_FLIP 0x02
 #define H_FLIP 0x01
@@ -47,7 +49,13 @@ void update_sprites() {
         flip = 0;
     }
 
-    VERA.data0 = ((game_objects.collisionMask[SHIP_OBJ_INDEX] << 4) | (SHIP_Z_DEPTH << 2) | flip);
+    if (game_objects.isDestroyed[SHIP_OBJ_INDEX]) {
+        zDepth = 0;
+    } else {
+        zDepth = SHIP_Z_DEPTH;
+    }
+
+    VERA.data0 = ((game_objects.collisionMask[SHIP_OBJ_INDEX] << 4) | (zDepth << 2) | flip);
 
     // skip the last byte: height width, and palette offset
     VERA.data0;
@@ -117,7 +125,12 @@ void update_sprites() {
             VERA.data0 = game_objects.yPos[currentEnemy];
             VERA.data0 = (game_objects.yPos[currentEnemy] >> 8);
 
-            zDepth = 3;
+            if (game_objects.isDestroyed[currentEnemy]) {
+                zDepth = 0;
+            } else {
+                zDepth = 3;
+            }
+            
             flip = 0;
             if (game_objects.direction[currentEnemy] == LEFT) {
                 flip = H_FLIP;

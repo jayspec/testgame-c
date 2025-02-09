@@ -42,7 +42,7 @@ void load_sprite_sheets() {
     sprite_sheets.filename[SHOT_SPRITE_SHEET] = "assets/shot.img";
     sprite_sheets.palette_filename[SHOT_SPRITE_SHEET] = "assets/shot.pal";
     sprite_sheets.palette_index[SHOT_SPRITE_SHEET] = 2;
-    sprite_sheets.collision_mask[SHOT_SPRITE_SHEET] = 0b0001;
+    sprite_sheets.collision_mask[SHOT_SPRITE_SHEET] = 0b0010;
     sprite_sheets.default_x[SHOT_SPRITE_SHEET] = 0;
     sprite_sheets.default_y[SHOT_SPRITE_SHEET] = 0;
     sprite_sheets.default_z_depth[SHOT_SPRITE_SHEET] = 0;
@@ -53,7 +53,7 @@ void load_sprite_sheets() {
     sprite_sheets.filename[ENEMY_SPRITE_SHEET] = "assets/enemy.img";
     sprite_sheets.palette_filename[ENEMY_SPRITE_SHEET] = "assets/enemy.pal";
     sprite_sheets.palette_index[ENEMY_SPRITE_SHEET] = 3;
-    sprite_sheets.collision_mask[ENEMY_SPRITE_SHEET] = 0b0001;
+    sprite_sheets.collision_mask[ENEMY_SPRITE_SHEET] = 0b0011;
     sprite_sheets.default_x[ENEMY_SPRITE_SHEET] = 0;
     sprite_sheets.default_y[ENEMY_SPRITE_SHEET] = 0;
     sprite_sheets.default_z_depth[ENEMY_SPRITE_SHEET] = 0;

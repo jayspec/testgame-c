@@ -1,3 +1,9 @@
+#include "collision.h"
+#include "globals.h"
+#include <cx16.h>
+
+#include <stdint.h>
+
 #include "sprite_load.h"
 #include "sprite_update.h"
 #include "ship.h"
@@ -5,10 +11,11 @@
 #include "shot.h"
 #include "enemy.h"
 #include "irq.h"
-#include "debug.h"
+#include "game_objects.h"
 
-#include <stdint.h>
-#include <cx16.h>
+#ifdef DEBUG
+#include "debug.h"
+#endif
 
 void initialize();
 void init_irq();
@@ -22,6 +29,7 @@ int main() {
         move_player_ship();
         handle_shots();
         handle_enemies();
+        handle_collisions();
         waitvsync();
         update_sprites();
     }
@@ -47,6 +55,7 @@ void init_irq() {
 uint8_t __attribute__((interrupt_norecurse,no_isr)) irq_handler() {
     if (VERA.irq_flags & 0b100) {
         VERA.irq_flags = 0b100;
+        game_objects.checkCollisions = true;
         return 1;
     } else {
         return 0;

@@ -65,8 +65,9 @@ void advance_enemy_at_index(uint8_t enemy_index) {
                 break;
         }
 
-        if (enemy_is_off_screen(game_objects.xPos[enemy_object_index], game_objects.yPos[enemy_object_index])) {
+        if (game_objects.isDestroyed[enemy_object_index] || enemy_is_off_screen(game_objects.xPos[enemy_object_index], game_objects.yPos[enemy_object_index])) {
             game_objects.isActive[enemy_object_index] = false;
+            game_objects.isDestroyed[enemy_object_index] = false;
             numEnemies--;
         }
     }

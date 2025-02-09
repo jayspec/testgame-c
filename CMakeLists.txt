@@ -15,4 +15,5 @@ add_executable(
     src/enemy.c
     src/debug.c
     src/irq.s
-    src/game_objects.c)
+    src/game_objects.c
+    src/collision.c)
