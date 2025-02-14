@@ -1,0 +1,9 @@
+[
+    {
+        "name": "Commander X16 Kit",
+        "compilers": {
+            "C": "C:/llvm-mos/bin/mos-cx16-clang.bat",
+            "CXX": "C:/llvm-mos/bin/mos-cx16-clang++.bat"
+        }
+    }
+]

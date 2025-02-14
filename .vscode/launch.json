@@ -6,7 +6,7 @@
             "type": "PowerShell",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "script": "C:/Users/JasonSpecland/dev/x16/x16emu/x16emu.exe",
+            "script": "C:/Users/JasonSpecland.DESKTOP-JNMAMPM/dev/x16/x16emu/x16emu.exe",
             "args": ["-scale", "4", "-prg", "./build/testgame", "-run", "-dump", "R", "-debug"],
             "preLaunchTask": "Build and Run"
         }
