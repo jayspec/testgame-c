@@ -70,7 +70,7 @@ void set_sprite_costume_at_index(uint8_t objectIndex) {
 }
 
 void set_sprite_position_at_index(uint8_t objectIndex) {
-    /* Update the ship position */
+    /* Update the sprite position */
 
     if (game_objects.isActive[objectIndex]) {
         VERA.data0 = game_objects.xPos[objectIndex];

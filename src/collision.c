@@ -40,7 +40,7 @@ void handle_collisions() {
                     if (check_object_collision_at_object_indexes(shot_index, enemy_index)) {
                         game_objects.isDestroyed[enemy_index] = true;
                         game_objects.destructionCounter[enemy_index] = NUM_DESTRUCTION_FRAMES;
-                        game_objects.isActive[shot_index] = false;
+                        game_objects.isDestroyed[shot_index] = true;
                     }
                 }
             }
