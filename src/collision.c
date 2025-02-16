@@ -15,8 +15,6 @@
 #define SPRITE_OBJECT_HEIGHT 32
 #define SPRITE_OBJECT_WIDTH 32
 
-#define DESTRUCTION_COUNTDOWN_START 50 // number of frames it takes for an object to be destroyed
-
 bool check_object_collision_at_object_indexes(uint8_t obj1, uint8_t obj2);
 
 void handle_collisions() {
@@ -30,7 +28,7 @@ void handle_collisions() {
                         break;
                     }
                     game_objects.isDestroyed[SHIP_OBJ_INDEX] = true;
-                    game_objects.destructionCounter[SHIP_OBJ_INDEX] = DESTRUCTION_COUNTDOWN_START;
+                    game_objects.destructionCounter[SHIP_OBJ_INDEX] = NUM_DESTRUCTION_FRAMES;
                     break;
                 }
             }
@@ -41,7 +39,7 @@ void handle_collisions() {
                 for (uint8_t enemy_index = ENEMY_FIRST_OBJ_INDEX; enemy_index <= ENEMY_LAST_OBJ_INDEX; enemy_index++) {
                     if (check_object_collision_at_object_indexes(shot_index, enemy_index)) {
                         game_objects.isDestroyed[enemy_index] = true;
-                        game_objects.destructionCounter[enemy_index] = DESTRUCTION_COUNTDOWN_START;
+                        game_objects.destructionCounter[enemy_index] = NUM_DESTRUCTION_FRAMES;
                         game_objects.isActive[shot_index] = false;
                     }
                 }

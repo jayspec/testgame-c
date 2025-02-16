@@ -15,7 +15,9 @@
 #define SHIP_SPEED 5
 #define SHIP_START_X 150
 #define SHIP_START_Y 100
-#define SHIP_Z_DEPTH 3
+
+#define Z_DEPTH_VISIBLE 3
+#define Z_DEPTH_HIDDEN 0
 
 #define SHOT_SPEED 7
 #define SHOT_FRAME_DELAY 10
@@ -24,6 +26,8 @@
 #define ENEMY_SPEED 2
 #define MAX_ENEMIES 2
 #define ENEMY_DELAY 20
+
+#define NUM_DESTRUCTION_FRAMES 8 // number of frames it takes for an object to be destroyed
 
 #define DEBUG
 

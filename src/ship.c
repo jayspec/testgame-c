@@ -14,6 +14,8 @@ void init_ship() {
     game_objects.yPos[SHIP_OBJ_INDEX] = SHIP_START_Y;
     game_objects.direction[SHIP_OBJ_INDEX] = default_direction;
     game_objects.collisionMask[SHIP_OBJ_INDEX] = 0b0001;
+    game_objects.isActive[SHIP_OBJ_INDEX] = true;
+    game_objects.isDestroyed[SHIP_OBJ_INDEX] = false;
 }
 
 void move_player_ship() {

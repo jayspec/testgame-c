@@ -33,7 +33,7 @@ void load_sprite_sheets() {
     sprite_sheets.collision_mask[HERO_SPRITE_SHEET] = 0b0001;
     sprite_sheets.default_x[HERO_SPRITE_SHEET] = SHIP_START_X;
     sprite_sheets.default_y[HERO_SPRITE_SHEET] = SHIP_START_Y;
-    sprite_sheets.default_z_depth[HERO_SPRITE_SHEET] = SHIP_Z_DEPTH;
+    sprite_sheets.default_z_depth[HERO_SPRITE_SHEET] = Z_DEPTH_VISIBLE;
     sprite_sheets.sprites_in_sheet[HERO_SPRITE_SHEET] = 2;
     sprite_sheets.max_on_screen[HERO_SPRITE_SHEET] = 1;
 
@@ -44,7 +44,7 @@ void load_sprite_sheets() {
     sprite_sheets.collision_mask[SHOT_SPRITE_SHEET] = 0b0010;
     sprite_sheets.default_x[SHOT_SPRITE_SHEET] = 0;
     sprite_sheets.default_y[SHOT_SPRITE_SHEET] = 0;
-    sprite_sheets.default_z_depth[SHOT_SPRITE_SHEET] = 0;
+    sprite_sheets.default_z_depth[SHOT_SPRITE_SHEET] = Z_DEPTH_HIDDEN;
     sprite_sheets.sprites_in_sheet[SHOT_SPRITE_SHEET] = 2;
     sprite_sheets.max_on_screen[SHOT_SPRITE_SHEET] = MAX_SHOTS;
 
@@ -55,7 +55,7 @@ void load_sprite_sheets() {
     sprite_sheets.collision_mask[ENEMY_SPRITE_SHEET] = 0b0011;
     sprite_sheets.default_x[ENEMY_SPRITE_SHEET] = 0;
     sprite_sheets.default_y[ENEMY_SPRITE_SHEET] = 0;
-    sprite_sheets.default_z_depth[ENEMY_SPRITE_SHEET] = 0;
+    sprite_sheets.default_z_depth[ENEMY_SPRITE_SHEET] = Z_DEPTH_HIDDEN;
     sprite_sheets.sprites_in_sheet[ENEMY_SPRITE_SHEET] = 2;
     sprite_sheets.max_on_screen[ENEMY_SPRITE_SHEET] = MAX_ENEMIES;
 
@@ -66,7 +66,7 @@ void load_sprite_sheets() {
     sprite_sheets.collision_mask[EXPLOSION_SPRITE_SHEET] = 0b0000;
     sprite_sheets.default_x[EXPLOSION_SPRITE_SHEET] = 0;
     sprite_sheets.default_y[EXPLOSION_SPRITE_SHEET] = 0;
-    sprite_sheets.default_z_depth[EXPLOSION_SPRITE_SHEET] = 0;
+    sprite_sheets.default_z_depth[EXPLOSION_SPRITE_SHEET] = Z_DEPTH_HIDDEN;
     sprite_sheets.sprites_in_sheet[EXPLOSION_SPRITE_SHEET] = 8;
     sprite_sheets.max_on_screen[EXPLOSION_SPRITE_SHEET] = 1;
 
