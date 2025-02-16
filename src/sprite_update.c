@@ -13,7 +13,9 @@
 #define V_FLIP 0x02
 #define H_FLIP 0x01
 
-typedef enum { SHIP_VERTICAL, SHIP_HORIZONTAL, SHOT_VERTICAL, SHOT_HORIZONTAL, ENEMY_VERTICAL, ENEMY_HORIZONTAL } sprite_type;
+#define EXPLOSION_PALETTE_OFFSET 4
+
+typedef enum { SHIP_VERTICAL, SHIP_HORIZONTAL, SHOT_VERTICAL, SHOT_HORIZONTAL, ENEMY_VERTICAL, ENEMY_HORIZONTAL, EXPLOSION } sprite_type;
 
 void update_sprites() {
     VERA.address = SPRITE_ATTR_BASE & 0xffff;
@@ -24,10 +26,15 @@ void update_sprites() {
     uint8_t flip;
     uint8_t sprite_num;
 
-    if (game_objects.direction[SHIP_OBJ_INDEX] == LEFT || game_objects.direction[SHIP_OBJ_INDEX] == RIGHT) {
-        sprite_num = SHIP_HORIZONTAL;
+    if (game_objects.isDestroyed[SHIP_OBJ_INDEX]) {
+        sprite_num = EXPLOSION; // fix later
+        game_objects.destructionCounter[SHIP_OBJ_INDEX]--;
     } else {
-        sprite_num = SHIP_VERTICAL;
+        if (game_objects.direction[SHIP_OBJ_INDEX] == LEFT || game_objects.direction[SHIP_OBJ_INDEX] == RIGHT) {
+            sprite_num = SHIP_HORIZONTAL;
+        } else {
+            sprite_num = SHIP_VERTICAL;
+        }
     }
 
     /* Update the ship position */
@@ -35,13 +42,12 @@ void update_sprites() {
     VERA.data0 = ((SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * sprite_num)) >> 5);
     VERA.data0 = ((SPRITE_VRAM_BASE_ADDR + (SPRITE_SIZE * sprite_num)) >> 13); // Bit 8 = Mode 0 (4bpp, 16 color)
 
-
     VERA.data0 = game_objects.xPos[SHIP_OBJ_INDEX];
     VERA.data0 = game_objects.xPos[SHIP_OBJ_INDEX] >> 8;
     VERA.data0 = game_objects.yPos[SHIP_OBJ_INDEX];
     VERA.data0 = game_objects.yPos[SHIP_OBJ_INDEX] >> 8;
 
-    if (game_objects.direction[SHIP_OBJ_INDEX] == LEFT) {
+    if (game_objects.direction[SHIP_OBJ_INDEX] == LEFT && !game_objects.isDestroyed[SHIP_OBJ_INDEX]) {
         flip = H_FLIP;
     } else if (game_objects.direction[SHIP_OBJ_INDEX] == DOWN) {
         flip = V_FLIP;
@@ -49,7 +55,7 @@ void update_sprites() {
         flip = 0;
     }
 
-    if (game_objects.isDestroyed[SHIP_OBJ_INDEX]) {
+    if (game_objects.isDestroyed[SHIP_OBJ_INDEX] && game_objects.destructionCounter[SHIP_OBJ_INDEX] == 0) {
         zDepth = 0;
     } else {
         zDepth = SHIP_Z_DEPTH;
@@ -57,8 +63,13 @@ void update_sprites() {
 
     VERA.data0 = ((game_objects.collisionMask[SHIP_OBJ_INDEX] << 4) | (zDepth << 2) | flip);
 
-    // skip the last byte: height width, and palette offset
-    VERA.data0;
+    // if the ship has been destroyed, switch to the explosion's palette offset
+    if (game_objects.isDestroyed[SHIP_OBJ_INDEX]) {
+        VERA.data0 = ((SPRITE_HEIGHT << 6) | (SPRITE_WIDTH << 4) | EXPLOSION_PALETTE_OFFSET);
+    } else {
+        // skip the last byte: height width, and palette offset
+        VERA.data0;
+    }
 
     /* Update all the shots */
 

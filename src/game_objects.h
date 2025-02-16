@@ -19,6 +19,7 @@ typedef struct {
     int16_t yPos[MAX_GAME_OBJECTS];
     bool isActive[MAX_GAME_OBJECTS];
     bool isDestroyed[MAX_GAME_OBJECTS];
+    uint16_t destructionCounter[MAX_GAME_OBJECTS];
     direction direction[MAX_GAME_OBJECTS];
     uint8_t collisionMask[MAX_GAME_OBJECTS];
 } game_object_collection;

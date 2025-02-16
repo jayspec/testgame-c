@@ -18,6 +18,10 @@ void init_ship() {
 
 void move_player_ship() {
     JoyState joystick_state = get_joystick_state();
+    if (game_objects.isDestroyed[SHIP_OBJ_INDEX]) {
+        return;
+    }
+    
     // right
     if (!(joystick_state.data0 & JOY_RIGHT_MASK)) {
         game_objects.xPos[SHIP_OBJ_INDEX] += SHIP_SPEED;

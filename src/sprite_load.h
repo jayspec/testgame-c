@@ -2,7 +2,12 @@
 
 #pragma once
 
-#define NUM_SPRITE_SHEETS 3
+#define NUM_SPRITE_SHEETS 4
+
+#define HERO_SPRITE_SHEET 0
+#define SHOT_SPRITE_SHEET 1
+#define ENEMY_SPRITE_SHEET 2
+#define EXPLOSION_SPRITE_SHEET 3
 
 typedef struct {
     char *filename[NUM_SPRITE_SHEETS];

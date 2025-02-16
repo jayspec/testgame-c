@@ -7,15 +7,14 @@
 #include "sprites.h"
 #include "sprite_load.h"
 
+#ifdef DEBUG
 #include <stdio.h>
 #include "debug.h"
+#endif
 
 #define PALETTE_VRAM_BASE_ADDR 0x1FA00
 #define PALETTE_LINE_SIZE 16 * 2 // 2 bytes per entry, 16 entries per line
 
-#define HERO_SPRITE_SHEET 0
-#define SHOT_SPRITE_SHEET 1
-#define ENEMY_SPRITE_SHEET 2
 
 unsigned long load_objects_to_vram_at_index(const char * filename, unsigned long base_vram_addr, uint16_t object_size, uint8_t object_index);
 unsigned long load_sprites_to_vram_at_index(const char* filename, uint8_t sprite_index);
@@ -59,6 +58,17 @@ void load_sprite_sheets() {
     sprite_sheets.default_z_depth[ENEMY_SPRITE_SHEET] = 0;
     sprite_sheets.sprites_in_sheet[ENEMY_SPRITE_SHEET] = 2;
     sprite_sheets.max_on_screen[ENEMY_SPRITE_SHEET] = MAX_ENEMIES;
+
+    /* explosion sprite sheet */
+    sprite_sheets.filename[EXPLOSION_SPRITE_SHEET] = "assets/explo.img";
+    sprite_sheets.palette_filename[EXPLOSION_SPRITE_SHEET] = "assets/explo.pal";
+    sprite_sheets.palette_index[EXPLOSION_SPRITE_SHEET] = 4;
+    sprite_sheets.collision_mask[EXPLOSION_SPRITE_SHEET] = 0b0000;
+    sprite_sheets.default_x[EXPLOSION_SPRITE_SHEET] = 0;
+    sprite_sheets.default_y[EXPLOSION_SPRITE_SHEET] = 0;
+    sprite_sheets.default_z_depth[EXPLOSION_SPRITE_SHEET] = 0;
+    sprite_sheets.sprites_in_sheet[EXPLOSION_SPRITE_SHEET] = 8;
+    sprite_sheets.max_on_screen[EXPLOSION_SPRITE_SHEET] = 1;
 
     // load the sprites into vram,
     // Then set their attributes
