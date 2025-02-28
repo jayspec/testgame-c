@@ -12,6 +12,7 @@
 #include "enemy.h"
 #include "irq.h"
 #include "game_objects.h"
+#include "sound.h"
 
 #ifdef DEBUG
 #include "debug.h"
@@ -32,6 +33,7 @@ int main() {
         handle_collisions();
         waitvsync();
         update_sprites();
+        update_sounds();
     }
 
     return 0;

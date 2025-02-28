@@ -16,4 +16,5 @@ add_executable(
     src/debug.c
     src/irq.s
     src/game_objects.c
-    src/collision.c)
+    src/collision.c
+    src/sound.c)
