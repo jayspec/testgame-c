@@ -45,6 +45,7 @@ void initialize() {
     init_ship();
     init_shots();
     init_enemies();
+    init_sound();
     load_sprite_sheets();
 }
 
