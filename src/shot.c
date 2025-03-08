@@ -36,10 +36,7 @@ void handle_shots() {
     }
 
     JoyState joystick_state = get_joystick_state();
-    if ((nextShotCountdown == 0) && (!(joystick_state.data0 & JOY_BTN_B_MASK))) {
-        char message[50];
-        sprintf(message, "numLiveShots: %d\n", numLiveShots);
-        debug_to_emu_console(message);
+    if ((nextShotCountdown == 0) && (!(joystick_state.data0 & JOY_BTN_B_MASK)) && !game_objects.isDestroyed[SHIP_OBJ_INDEX]) {
         if (numLiveShots < MAX_SHOTS) {
             fire_shot();
             nextShotCountdown = SHOT_FRAME_DELAY;
