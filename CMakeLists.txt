@@ -18,7 +18,7 @@ add_executable(
     src/irq.s
     src/game_objects.c
     src/collision.c
-    src/sound.c
+    src/music.c
 )
 
 target_link_libraries(testgame zsmkit)

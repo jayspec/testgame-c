@@ -2,13 +2,23 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Emulator",
+            "name": "Launch Official Emulator",
             "type": "PowerShell",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "script": "C:/Users/JasonSpecland.DESKTOP-JNMAMPM/dev/x16/box16-nr48.0-x64/box16.exe",
+            "script": "C:/Users/JasonSpecland.DESKTOP-JNMAMPM/dev/x16/x16emu/x16emu.exe",
+            "args": ["-scale", "4", "-prg", "./build/testgame", "-run"],
+            "preLaunchTask": "Build and Run"
+        },
+        {
+            "name": "Launch Box16 Emulator",
+            "type": "PowerShell",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "script": "C:/Users/JasonSpecland.DESKTOP-JNMAMPM/dev/x16/box16-nr48.0-x64/Box16.exe",
             "args": ["-scale", "4", "-prg", "./build/testgame", "-run"],
             "preLaunchTask": "Build and Run"
         }
+
     ]
 }

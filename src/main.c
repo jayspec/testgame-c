@@ -12,7 +12,8 @@
 #include "enemy.h"
 #include "irq.h"
 #include "game_objects.h"
-#include "sound.h"
+//#include "sound.h"
+#include "music.h"
 
 #ifdef DEBUG
 #include "debug.h"
@@ -25,6 +26,8 @@ uint8_t irq_handler();
 int main() {
     initialize();
 
+    start_music();
+
     while(1) {
         refresh_joystick_state();
         move_player_ship();
@@ -32,8 +35,9 @@ int main() {
         handle_enemies();
         handle_collisions();
         waitvsync();
+        tick_music();
         update_sprites();
-        update_sounds();
+        //update_sounds();
     }
 
     return 0;
@@ -45,8 +49,9 @@ void initialize() {
     init_ship();
     init_shots();
     init_enemies();
-    init_sound();
+    //init_sound();
     load_sprite_sheets();
+    load_music();
 }
 
 void init_irq() {

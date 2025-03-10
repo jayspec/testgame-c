@@ -6,8 +6,6 @@
 
 #include "sound.h"
 
-void set_vera_to_psg_base();
-
 void init_sound() {
     
     VERA.address = PSG_REGISTER_BASE & 0xffff;
