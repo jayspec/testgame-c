@@ -43,7 +43,7 @@ void start_music() {
         return;
     }
 
-    //zsm_setloop(PRIORITY, true);
+    zsm_setloop(PRIORITY, true);
     zsm_play(PRIORITY);
 
     state = zsm_getstate(PRIORITY);

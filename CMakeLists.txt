@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 set(LLVM_MOS_PLATFORM cx16)
-set(CMAKE_C_FLAGS "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON")
+set(CMAKE_C_FLAGS "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DZSMKIT_EMBED_BINARY")
 find_package(llvm-mos-sdk REQUIRED)
 enable_language(C ASM)
 project(testgame)
